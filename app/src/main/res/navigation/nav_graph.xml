@@ -13,4 +13,22 @@
         android:id="@+id/homefragment"
         android:name="features.auth.presentation.HomeFragment"
         android:label="Home"/>
+
+    <!--vistas para los iconos de abajo -->
+
+
+    <fragment
+        android:id="@+id/tab_categoria"
+        android:name="features.auth.presentation.CategoriaFragment"
+        android:label="Categoría" />
+
+    <fragment
+        android:id="@+id/tab_bolsa"
+        android:name="features.auth.presentation.BolsaFragment"
+        android:label="Bolsa" />
+
+    <fragment
+        android:id="@+id/tab_menu"
+        android:name="features.auth.presentation.MenuFragment"
+        android:label="Menú" />
 </navigation>
