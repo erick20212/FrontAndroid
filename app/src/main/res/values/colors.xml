@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="wm_purple_start">#7C4DFF</color>
+    <color name="wm_purple_end">#B388FF</color>
+    <color name="wm_purple_text">#5A41D1</color>
+    <color name="wm_border">#DDDDDD</color>
+    <color name="wm_placeholder">#9AA0A6</color>
+    <color name="wm_bg">#F5F5F7</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gris">#808080</color>
+    <color name="purple_selected">#5B3CD1</color>
+    <color name="gray_unselected">#2F3C41</color>
+
+</resources>

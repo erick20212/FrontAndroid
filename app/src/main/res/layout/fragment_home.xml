@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    android:paddingTop="20dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
+
+    <!-- Texto ARRIBA -->
+    <TextView
+        android:id="@+id/textmarca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wimiline"
+        android:textSize="29sp"
+        android:textStyle="bold"
+        android:textColor="@color/gris"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- componente  de buscar-->
+    <include
+        layout="@layout/view_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
+
+    <!-- encargado para que sea scroll el contenido -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <!-- ESTE LinearLayout vertical agrupa TODO lo que quieres scrollear -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--texto inicio-->
+            <TextView
+                android:id="@+id/txtInicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INICIO"
+                android:paddingTop="20sp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="8dp"/>
+
+            <!--imagen que muestra el descuento-->
+            <ImageView
+                android:id="@+id/imgBanner"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:src="@drawable/ic_descuento"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="8dp" />
+
+            <!--texto que dice novedades-->
+            <TextView
+                android:id="@+id/txtnovedades"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Novedades"
+                android:paddingTop="20sp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="8dp"/>
+
+            <!--contenedor de los cards -->
+            <GridLayout
+                android:id="@+id/gridCardProductos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:padding="8dp">
+
+                <include
+                    layout="@layout/view_product_card"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:padding="8dp"/>
+
+                <include
+                    layout="@layout/view_product_card"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:padding="8dp"/>
+                <include
+                    layout="@layout/view_product_card"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:padding="8dp"/>
+                <include
+                    layout="@layout/view_product_card"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:padding="8dp"/>
+                <include
+                    layout="@layout/view_product_card"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:padding="8dp"/>
+                <include
+                    layout="@layout/view_product_card"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:padding="8dp"/>
+            </GridLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
