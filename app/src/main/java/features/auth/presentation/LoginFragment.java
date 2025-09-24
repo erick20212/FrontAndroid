@@ -1,9 +1,8 @@
 package features.auth.presentation;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -17,6 +16,16 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.sistema_ventas.R;
 
+import features.auth.presentation.data.LoginRequest;
+import features.auth.presentation.data.LoginResponse;
+import network.ApiClient;
+import network.AuthApi;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import storage.TokenStore;
 
 public class LoginFragment extends Fragment {
 
@@ -25,16 +34,10 @@ public class LoginFragment extends Fragment {
     private ProgressBar progress;
     private TextView txtError;
 
-    public LoginFragment() {
-        super(R.layout.fragment_login); // usa el layout del Paso 1
-    }
+    private AuthApi api;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_login, container, false);
+    public LoginFragment() {
+        super(R.layout.fragment_login); // ✅ deja esto y NO infles manualmente
     }
 
     @Override
@@ -47,15 +50,60 @@ public class LoginFragment extends Fragment {
         progress   = v.findViewById(R.id.progress);
         txtError   = v.findViewById(R.id.txtError);
 
-        // Acción mínima para probar la pantalla (aún sin ViewModel)
-        btnLogin.setOnClickListener(view -> {
-            String email = edtEmail.getText().toString().trim();
-            String pass  = edtPassword.getText().toString();
-            if (email.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(requireContext(), "Completa email y password", Toast.LENGTH_SHORT).show();
-            } else {
-                NavHostFragment.findNavController(this).navigate(R.id.homefragment);
+        Retrofit retrofit = ApiClient.build(requireContext());
+        api = retrofit.create(AuthApi.class);
+
+        btnLogin.setOnClickListener(view -> doLogin());
+    }
+
+    private void doLogin() {
+        String email = edtEmail.getText().toString().trim();
+        String pass  = edtPassword.getText().toString();
+
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
+            Toast.makeText(requireContext(), "Completa email y password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        setLoading(true);
+        api.login(new LoginRequest(email, pass)).enqueue(new Callback<LoginResponse>() {
+            @Override public void onResponse(Call<LoginResponse> call, Response<LoginResponse> resp) {
+                setLoading(false);
+                if (resp.isSuccessful() && resp.body()!=null) {
+                    LoginResponse body = resp.body();
+                    if (body.success) {
+                        TokenStore.save(requireContext(), body.token);
+                        Toast.makeText(requireContext(), "Bienvenido " + body.user.nombre, Toast.LENGTH_SHORT).show();
+                        NavHostFragment.findNavController(LoginFragment.this)
+                                .navigate(R.id.homefragment);
+                    } else {
+                        showError("Credenciales incorrectas");
+                    }
+                } else {
+                    showError(readError(resp.errorBody()));
+                }
+            }
+            @Override public void onFailure(Call<LoginResponse> call, Throwable t) {
+                setLoading(false);
+                showError("Error de red: " + t.getMessage());
             }
         });
+    }
+
+    private void setLoading(boolean loading) {
+        progress.setVisibility(loading ? View.VISIBLE : View.GONE);
+        btnLogin.setEnabled(!loading);
+        txtError.setVisibility(View.GONE);
+    }
+
+    private void showError(String msg) {
+        txtError.setText(msg);
+        txtError.setVisibility(View.VISIBLE);
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    private String readError(ResponseBody errBody) {
+        try { return errBody != null ? errBody.string() : "Error en la petición"; }
+        catch (Exception e) { return "Error en la petición"; }
     }
 }

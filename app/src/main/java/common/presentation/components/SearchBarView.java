@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.sistema_ventas.R;
-
 public class SearchBarView extends LinearLayout {
 
     private EditText edtQuery;
