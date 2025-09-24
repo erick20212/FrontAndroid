@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
     // Emulador Android → localhost del PC
-    private static final String BASE_URL = "http://10.0.2.2:8081/";
+    private static final String BASE_URL = "http://26.246.241.197:8081/";
 
     public static Retrofit build(Context context){
         HttpLoggingInterceptor log = new HttpLoggingInterceptor();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">10.0.2.2</domain>  <!-- emulador → PC -->
+        <domain includeSubdomains="true">26.246.241.197</domain>  <!-- emulador → PC -->
 
     </domain-config>
 </network-security-config>
