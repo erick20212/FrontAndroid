@@ -1,5 +1,6 @@
 package com.example.sistema_ventas;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import storage.TokenStore;  // Asegúrate de tener la clase TokenStore
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +29,28 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // ✅ Verificar si hay un token
+        String token = TokenStore.get(this);
+        if (token == null) {
+            // Si no hay token, redirigir al LoginFragment
+            NavHostFragment navHostFragment =
+                    (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main);
+            if (navHostFragment == null) {
+                throw new IllegalStateException("NavHostFragment con id R.id.main no encontrado. Revisa activity_main.xml");
+            }
+            NavController navController = navHostFragment.getNavController();
+            navController.navigate(R.id.loginFragment);  // Navegar al LoginFragment
+        } else {
+            // Si hay token, redirigir al HomeFragment
+            NavHostFragment navHostFragment =
+                    (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.main);
+            if (navHostFragment == null) {
+                throw new IllegalStateException("NavHostFragment con id R.id.main no encontrado. Revisa activity_main.xml");
+            }
+            NavController navController = navHostFragment.getNavController();
+            navController.navigate(R.id.homefragment);  // Navegar al HomeFragment
+        }
 
         // ✅ Usa NavHostFragment para obtener el NavController de forma segura
         NavHostFragment navHostFragment =
