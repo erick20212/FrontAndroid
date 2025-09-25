@@ -61,4 +61,5 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public int getItemCount() {
         return productList.size();  // Número de elementos en la lista de productos
     }
+
 }

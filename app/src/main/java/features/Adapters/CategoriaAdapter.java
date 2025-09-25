@@ -1,5 +1,6 @@
 package features.Adapters;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,25 +8,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.sistema_ventas.R;
 
 import java.util.List;
+
+import features.auth.presentation.ProductsFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import Dto.CategoriaDTO;
-import network.ApiCategoria;  // Usa ApiCategoria
-
+import network.ApiCategoria;
 
 public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder> {
 
     private List<CategoriaDTO> categoriaList;
 
-    // Constructor
     public CategoriaAdapter(List<CategoriaDTO> categoriaList) {
         this.categoriaList = categoriaList;
     }
@@ -51,7 +53,29 @@ public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.Cate
         if (categoria.getImagenUrl() == null || categoria.getImagenUrl().isEmpty()) {
             holder.imgIcono.setImageResource(R.drawable.ic_manzana); // Icono por defecto
         }
+
+        // Agregar un listener para el clic
+        holder.itemView.setOnClickListener(v -> {
+            // Crear un Bundle con el ID de la categoría y el nombre de la categoría
+            Bundle bundle = new Bundle();
+            bundle.putString("categoriaId", categoria.getCategoriaId().toString());  // Pasa el ID de la categoría
+            bundle.putString("categoriaNombre", categoria.getNombre());  // Pasa el nombre de la categoría
+
+            // Crear el fragmento de productos
+            ProductsFragment productsFragment = new ProductsFragment();
+            productsFragment.setArguments(bundle);  // Pasar el ID de la categoría y el nombre de la categoría al fragmento de productos
+
+            // Reemplazar el fragmento actual con el nuevo fragmento
+            if (v.getContext() instanceof AppCompatActivity) {
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.main, productsFragment)  // Asegúrate de tener un contenedor para los fragmentos
+                        .addToBackStack(null)  // Para permitir que el usuario pueda volver al fragmento anterior
+                        .commit();
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
